@@ -1,0 +1,54 @@
+/** @format */
+
+import React from "react"
+import { Link, useLocation } from "react-router-dom"
+import { navLinks } from "../utils/data"
+import { useStoreContext } from "../store"
+
+const Nav = () => {
+	const { isLoggedIn } = useStoreContext()
+	const { pathname } = useLocation()
+	return (
+		<nav
+			style={{ backgroundColor: "#0097D8" }}
+			className="flex justify-between items-center w-full px-32 h-12"
+		>
+			<Link to="/">
+				<p className="text-white text-xl font-bold">Barbershop</p>
+			</Link>
+			{!pathname.includes("/admin") &&
+				(isLoggedIn ? (
+					<Link to="/services">
+						<p
+							className="text-sm font-bold"
+							style={{
+								color:
+									pathname === "/services" || pathname === "/book"
+										? "#FFF"
+										: "black",
+							}}
+						>
+							Book
+						</p>
+					</Link>
+				) : (
+					<div className="flex">
+						{navLinks.map((value, index) => (
+							<Link key={index} to={value.route} className="mr-4">
+								<p
+									className="text-sm font-bold"
+									style={{
+										color: value.route === pathname ? "#FFF" : "black",
+									}}
+								>
+									{value.name}
+								</p>
+							</Link>
+						))}
+					</div>
+				))}
+		</nav>
+	)
+}
+
+export default Nav
