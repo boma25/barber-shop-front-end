@@ -3,10 +3,7 @@
 const initialState = {
 	isLoggedIn: false,
 	activeService: "",
-	order: {
-		date: "",
-		time: "",
-	},
+	accessToken: "",
 }
 
 const persistData = (data) => {

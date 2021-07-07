@@ -2,24 +2,43 @@
 
 import React, { useState } from "react"
 import Layout from "../../components/layout"
-// import { useStoreContext } from "../../store"
+import { useStoreContext } from "../../store"
+import { login } from "../../utils/helpers.js/auth.helper"
+import { Redirect } from "react-router-dom"
 
 const Login = () => {
-	// const { isLoggedIn } = useStoreContext()
+	const { store, setStore } = useStoreContext()
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
 	})
 	const [isLoading, setIsLoading] = useState(false)
+	const [redirect, setRedirect] = useState(false)
+	const [to, setTo] = useState(store?.order ? "/book" : "/services")
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		setIsLoading(true)
 		e.preventDefault()
-		console.log(formData)
+		const response = await login(formData)
+		setIsLoading(false)
+		if (response?.status === 201) {
+			setStore({
+				...store,
+				accessToken: `bearer ${response.data.access_token}`,
+				user: response.data.user,
+				isLoggedIn: true,
+			})
+			if (response.data.user.Role === "Admin") {
+				setTo("/admin/dashboard")
+			}
+			setRedirect(true)
+		}
 	}
-	return (
+	return redirect ? (
+		<Redirect to={to} />
+	) : (
 		<Layout>
 			<div className="flex justify-center">
 				<form

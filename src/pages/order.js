@@ -10,25 +10,40 @@ import "react-calendar/dist/Calendar.css"
 import moment from "moment"
 import calenderImg from "../assets/calender.png"
 import clockImg from "../assets/clock.png"
+import { book } from "../utils/helpers.js/book.helper"
+import { Redirect } from "react-router-dom"
 
 const Order = () => {
-	const { store, setStore, activeService } = useStoreContext()
+	const { store, setStore, activeService, isLoggedIn } = useStoreContext()
 	const [color, setColor] = useState("")
 	const [hover, setHover] = useState(-1)
 	const [isLoading, setIsLoading] = useState(false)
-	const [formData, setFormData] = useState({
-		time: "",
-		date: new Date(),
-		length: "",
-	})
+	const [redirect, setRedirect] = useState(false)
+	const [to, setTo] = useState("/login")
+	const [formData, setFormData] = useState(
+		store?.order || {
+			time: "8:00",
+			date: new Date(),
+			length: "",
+		}
+	)
 
 	useEffect(() => {
 		serviceList.forEach((value) => {
 			if (value.service === activeService) {
 				setColor(value.color)
-				setFormData({ ...formData, length: value.time })
+				setFormData({
+					...formData,
+					length: value.time,
+					service: value.service,
+					user: store?.user?._id || "",
+				})
 			}
 		})
+		if (activeService === "") {
+			setTo("/services")
+			setRedirect(true)
+		}
 		// eslint-disable-next-line
 	}, [])
 
@@ -36,12 +51,27 @@ const Order = () => {
 		setFormData({ ...formData, [field]: value })
 	}
 
-	const handleOrder = () => {
+	const handleOrder = async () => {
 		setIsLoading(true)
 		setStore({ ...store, order: formData })
+
+		if (isLoggedIn) {
+			setTo("/")
+			const response = await book(formData)
+			if (response.status === 201) {
+				const { order, ...rest } = store
+				setStore(rest)
+			} else {
+				return
+			}
+		}
+		setRedirect(true)
+		setIsLoading(false)
 	}
 
-	return (
+	return redirect ? (
+		<Redirect to={to} />
+	) : (
 		<Layout>
 			<p className="ml-32 mb-4 text-sm font-semibold ">
 				please select a date and time
@@ -114,7 +144,7 @@ const Order = () => {
 						className="rounded-b-xl flex justify-center items-center pt-3 pb-8"
 					>
 						{isLoading ? (
-							<div className="lds-dual-ring" />
+							<div className="lds-dual-ring-white " />
 						) : (
 							<ButtonPrimary
 								text="Continue"

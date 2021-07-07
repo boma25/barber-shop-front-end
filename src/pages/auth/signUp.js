@@ -2,10 +2,11 @@
 
 import React, { useState } from "react"
 import Layout from "../../components/layout"
-// import { useStoreContext } from "../../store"
+import { Redirect } from "react-router-dom"
+import { signUp } from "../../utils/helpers.js/auth.helper"
+import { toast } from "react-toastify"
 
 const SignUp = () => {
-	// const { isLoggedIn } = useStoreContext()
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -14,16 +15,30 @@ const SignUp = () => {
 		verify_password: "",
 	})
 	const [isLoading, setIsLoading] = useState(false)
+	const [redirect, setRedirect] = useState(false)
 
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault()
+		if (formData.password !== formData.verify_password) {
+			return toast.error("password && verify password do not match")
+		}
+		if (formData.password.length < 6) {
+			return toast.error("password is too short")
+		}
 		setIsLoading(true)
-		console.log(formData)
+		const response = await signUp(formData)
+
+		setIsLoading(false)
+		if (response.status === 201) {
+			setRedirect(true)
+		}
 	}
-	return (
+	return redirect ? (
+		<Redirect to="/login" />
+	) : (
 		<Layout>
 			<div className="flex justify-center">
 				<form
