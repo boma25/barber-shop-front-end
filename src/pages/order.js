@@ -78,22 +78,22 @@ const Order = () => {
 		<Redirect to={to} />
 	) : (
 		<Layout>
-			<p className="ml-32 mb-4 text-sm font-semibold ">
+			<p className="lg:ml-32  md:ml-4 ml-2 mb-4 text-sm font-semibold ">
 				please select a date and time
 			</p>
-			<div className="flex justify-between px-32">
+			<div className="md:flex justify-between lg:px-32 md:px-4 px-2">
 				<div>
 					<div className=" mb-4">
 						<p className="text-xl font-semibold mb-2">Date</p>
 						<Calendar
 							onChange={(value) => handleChange(value, "date")}
 							value={new Date(formData?.date)}
-							className="ml-4"
+							className="md:ml-4"
 						/>
 					</div>
 					<div className="border-t pt-4">
 						<p className="text-xl font-semibold mb-2">Time</p>
-						<div className="flex flex-wrap justify-between w-7/12 ml-4">
+						<div className="flex flex-wrap justify-between lg:w-7/12 md:ml-4">
 							{time.map((value, index) => (
 								<div
 									key={index}
@@ -116,48 +116,54 @@ const Order = () => {
 						</div>
 					</div>
 				</div>
-				<div className="w-1/4">
-					<div
-						style={{ backgroundColor: color }}
-						className="rounded-t-xl flex flex-col justify-center py-2 px-2"
-					>
-						<p className="text-sm font-semibold">Book summary</p>
-						<p className="text-xs mt-1">Event details</p>
-					</div>
-					<div className="border-r border-l h-36 pt-8">
-						<div className="flex items-center h-1/3 border-b border-t px-2">
-							<img alt="clock" src={clockImg} className="w-4 h-4 mr-2" />
-							<p className="text-xs">{formData.length}</p>
+				<div className="md:flex-none flex justify-center lg:w-1/3 md:w-5/12 w-full">
+					<div className=" w-9/12 md:mt-0 mt-4">
+						<div
+							style={{ backgroundColor: color }}
+							className="rounded-t-xl flex flex-col justify-center py-2 px-2"
+						>
+							<p className="text-sm font-semibold">Book summary</p>
+							<p className="text-xs mt-1">Event details</p>
 						</div>
-						<div className="flex items-center h-1/3 border-b px-2">
-							<img alt="calender" src={calenderImg} className="w-4 h-4 mr-2" />{" "}
-							<p className="text-xs">
-								{`${moment(formData.date)
-									.format("ddd, MMM DD YYYY")
-									.toUpperCase()}`}{" "}
-								{formData.time}
-								{` ${
-									formData.time.slice(0, formData.time.indexOf(":")) < 8
-										? "PM"
-										: "AM"
-								}`}
-							</p>
+						<div className="border-r border-l h-36 pt-8">
+							<div className="flex items-center h-1/3 border-b border-t px-2">
+								<img alt="clock" src={clockImg} className="w-4 h-4 mr-2" />
+								<p className="text-xs">{formData.length}</p>
+							</div>
+							<div className="flex items-center h-1/3 border-b px-2">
+								<img
+									alt="calender"
+									src={calenderImg}
+									className="w-4 h-4 mr-2"
+								/>{" "}
+								<p className="text-xs">
+									{`${moment(formData.date)
+										.format("ddd, MMM DD YYYY")
+										.toUpperCase()}`}{" "}
+									{formData.time}
+									{` ${
+										formData.time.slice(0, formData.time.indexOf(":")) < 8
+											? "PM"
+											: "AM"
+									}`}
+								</p>
+							</div>
 						</div>
-					</div>
-					<div
-						style={{ backgroundColor: color }}
-						className="rounded-b-xl flex justify-center items-center pt-3 pb-8"
-					>
-						{isLoading ? (
-							<div className="lds-dual-ring-white " />
-						) : (
-							<ButtonPrimary
-								text="Continue"
-								backgroundColor="#fff"
-								className="border w-10/12"
-								onClick={handleOrder}
-							/>
-						)}
+						<div
+							style={{ backgroundColor: color }}
+							className="rounded-b-xl flex justify-center items-center pt-3 pb-8"
+						>
+							{isLoading ? (
+								<div className="lds-dual-ring-white " />
+							) : (
+								<ButtonPrimary
+									text="Continue"
+									backgroundColor="#fff"
+									className="border w-10/12"
+									onClick={handleOrder}
+								/>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>

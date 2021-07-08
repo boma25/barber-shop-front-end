@@ -12,7 +12,7 @@ const Nav = () => {
 	return (
 		<nav
 			style={{ backgroundColor: "#0097D8" }}
-			className="flex justify-between items-center w-full px-32 h-12"
+			className="flex justify-between items-center w-full lg:px-32 md:px-4  px-2 h-12"
 		>
 			<Link to="/">
 				<p className="text-white text-xl font-bold">Barbershop</p>

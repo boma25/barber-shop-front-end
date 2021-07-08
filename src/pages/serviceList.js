@@ -19,10 +19,10 @@ const ServiceList = () => {
 
 	return (
 		<Layout>
-			<p className="ml-32 mb-10 text-sm font-semibold ">
+			<p className="ld:ml-32 md:ml-4 ml-2 mb-10 text-sm font-semibold ">
 				please select a service
 			</p>
-			<div className="px-32">
+			<div className="lg:px-32 md:px-4 px-2">
 				{serviceList.map((value, index) => (
 					<Link
 						key={index}
@@ -44,7 +44,9 @@ const ServiceList = () => {
 							style={{ backgroundColor: hover === index ? "#D6D4D4" : "#fff" }}
 							className="flex pl-10 items-center h-20 w-3/4"
 						>
-							<p className="text-3xl font-bold text-center">{value.service}</p>
+							<p className="md:text-3xl text-2xl font-bold text-center">
+								{value.service}
+							</p>
 						</div>
 					</Link>
 				))}

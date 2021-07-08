@@ -75,9 +75,9 @@ const Admin = () => {
 	) : (
 		<Layout>
 			{create && <CreateBarber onClose={handleClose} />}
-			<p className="text-3xl font-bold pl-32">DashBoard</p>
-			<div className="px-32 flex justify-between mt-12 h-96">
-				<div className="shadow-sm w-5/12 ">
+			<p className="text-3xl font-bold lg:pl-32 md:pl-4 pl-2">DashBoard</p>
+			<div className="lg:px-32 md:px-4 px-2 lg:flex justify-between mt-12 h-96">
+				<div className="shadow-sm lg:w-5/12 ">
 					<div className="flex justify-between items-center cursor-pointer">
 						<p className="text-xl font-bold mb-4">Barbers</p>
 						<p
@@ -137,7 +137,7 @@ const Admin = () => {
 							))}
 					</div>
 				</div>
-				<div className="shadow-sm w-1/2">
+				<div className="shadow-sm lg:w-1/2 mt-10 lg:mt-0">
 					<p className="text-xl font-bold mb-4">Booked</p>
 					<div className="overflow-auto h-5/6">
 						{books
@@ -192,7 +192,7 @@ const CreateBarber = ({ onClose }) => {
 	return (
 		<div className="flex justify-center">
 			<form
-				className="border  w-1/3 p-8 space-y-4 rounded-lg shadow-sm absolute bg-white"
+				className="border  lg:w-1/3 md:w-1/2 w-10/12 p-8 space-y-4 rounded-lg shadow-sm absolute bg-white"
 				onSubmit={handleSubmit}
 			>
 				<div className="w-full flex justify-end">

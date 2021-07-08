@@ -20,7 +20,7 @@ const Home = () => {
 					THE BEST HAIRCUTS ON THE EAST COAST
 				</p>
 			</div>
-			<div className="flex justify-end px-32 mt-16">
+			<div className="flex justify-end lg:px-32 md:px-4 px-2 mt-16">
 				<Link to="/services">
 					<ButtonPrimary text="Book" className="" />
 				</Link>

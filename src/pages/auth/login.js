@@ -44,7 +44,7 @@ const Login = () => {
 		<Layout>
 			<div className="flex justify-center">
 				<form
-					className="border  w-1/3 p-8 space-y-4 rounded-lg shadow-sm"
+					className="border  lg:w-1/3 md:w-1/2 w-10/12 p-8 space-y-4 rounded-lg shadow-sm"
 					onSubmit={handleLogin}
 				>
 					<p className="text-center text-2xl font-bold">Login</p>
