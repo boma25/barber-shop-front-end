@@ -11,8 +11,9 @@ const book = async ({ user, service, time, date }) => {
 		console.log(response)
 		return response
 	} catch (error) {
-		response = error.response.data.message
-		return toast.error(response)
+		response = error?.response?.data?.message || "network error"
+		toast.error(response)
+		return false
 	}
 }
 

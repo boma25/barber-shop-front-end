@@ -54,17 +54,22 @@ const Order = () => {
 	const handleOrder = async () => {
 		setIsLoading(true)
 		setStore({ ...store, order: formData })
-
-		if (isLoggedIn) {
-			setTo("/")
+		const { order, ...rest } = store
+		if (isLoggedIn && store.user.Role === "User") {
 			const response = await book(formData)
 			if (response.status === 201) {
+				setTo("/")
 				const { order, ...rest } = store
 				setStore(rest)
+			}
+			if (!response) {
+				setStore({ ...rest, isLoggedIn: false, accessToken: "" })
+				return setRedirect(true)
 			} else {
 				return
 			}
 		}
+		setStore({ ...rest, isLoggedIn: false, accessToken: "" })
 		setRedirect(true)
 		setIsLoading(false)
 	}
@@ -82,7 +87,7 @@ const Order = () => {
 						<p className="text-xl font-semibold mb-2">Date</p>
 						<Calendar
 							onChange={(value) => handleChange(value, "date")}
-							value={formData.date}
+							value={new Date(formData?.date)}
 							className="ml-4"
 						/>
 					</div>

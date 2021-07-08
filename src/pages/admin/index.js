@@ -9,25 +9,47 @@ import {
 	createBarber,
 } from "../../utils/helpers.js/admin.helper"
 import moment from "moment"
+import { Redirect } from "react-router-dom"
+import { useStoreContext } from "../../store"
+import { initialState } from "../../utils/helpers.js/store.helper"
 
 const Admin = () => {
 	const [barbers, setBarbers] = useState([])
 	const [books, setBooks] = useState([])
 	const [edit, setEdit] = useState(-1)
 	const [formData, setFormData] = useState({})
+	const [redirect, setRedirect] = useState(false)
+	const { store, setStore, isLoggedIn } = useStoreContext()
+	const [create, setCreate] = useState(false)
 
 	useEffect(() => {
+		if (!store?.user || store?.user?.Role !== "Admin") {
+			setStore(initialState)
+			setRedirect(true)
+		}
 		async function getData() {
 			const books = await getAllBooks()
 			const barbers = await getAllBarbers()
 			if (books.status === 200 || barbers.status === 200) {
-				setBooks(books.data)
-				setBarbers(barbers.data)
+				setBooks(books.data.sort((a, b) => new Date(a.date) - new Date(b.date)))
+				setBarbers(
+					barbers.data.sort((a, b) => new Date(a.date) - new Date(b.date))
+				)
+			}
+			if (books === "Unauthorized") {
+				setStore(initialState)
+				setRedirect(true)
 			}
 		}
-
-		getData()
+		isLoggedIn && getData()
+		//eslint-disable-next-line
 	}, [])
+
+	useEffect(() => {
+		if (!isLoggedIn) {
+			return setRedirect(true)
+		}
+	}, [isLoggedIn])
 
 	const handleUpdate = async () => {
 		const response = await updateBarber(formData)
@@ -43,15 +65,33 @@ const Admin = () => {
 		}
 	}
 
-	return (
+	const handleClose = (data) => {
+		setCreate(false)
+		data && setBarbers(barbers.concat(data))
+	}
+
+	return redirect ? (
+		<Redirect to="/login" />
+	) : (
 		<Layout>
+			{create && <CreateBarber onClose={handleClose} />}
 			<p className="text-3xl font-bold pl-32">DashBoard</p>
 			<div className="px-32 flex justify-between mt-12 h-96">
-				<div className="shadow-sm ">
-					<p className="text-xl font-bold mb-4">Barbers</p>
+				<div className="shadow-sm w-5/12 ">
+					<div className="flex justify-between items-center cursor-pointer">
+						<p className="text-xl font-bold mb-4">Barbers</p>
+						<p
+							className="text-blue-500 font-bold text-xs"
+							onClick={() => setCreate(true)}
+						>
+							{" "}
+							Create Barber
+						</p>
+					</div>
 					<div className="overflow-auto h-5/6">
 						{barbers
 							?.filter((value) => new Date(value.date) >= new Date())
+							?.sort((a, b) => new Date(a.date) - new Date(b.date))
 							?.map((value, index) => (
 								<div
 									key={index}
@@ -128,6 +168,79 @@ const Admin = () => {
 				</div>
 			</div>
 		</Layout>
+	)
+}
+
+const CreateBarber = ({ onClose }) => {
+	const [formData, setFormData] = useState({ date: "", number: "" })
+	const [isLoading, setIsLoading] = useState(false)
+
+	const handleChange = (e) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value })
+	}
+	const handleSubmit = async (e) => {
+		e.preventDefault()
+		setIsLoading(true)
+		const create = await createBarber(formData)
+		if (create.status === 201) {
+			onClose(formData)
+			setFormData({})
+		}
+
+		setIsLoading(false)
+	}
+	return (
+		<div className="flex justify-center">
+			<form
+				className="border  w-1/3 p-8 space-y-4 rounded-lg shadow-sm absolute bg-white"
+				onSubmit={handleSubmit}
+			>
+				<div className="w-full flex justify-end">
+					<p onClick={onClose} className="cursor-pointer">
+						x
+					</p>
+				</div>
+				<p className="text-center text-2xl font-bold">Create Barber</p>
+				<div>
+					<p>Date</p>
+					<input
+						type="date"
+						name="date"
+						required
+						placeholder="Date "
+						style={{ backgroundColor: "#DFDFDF" }}
+						className="pl-4 h-10 w-full focus:outline-none"
+						onChange={handleChange}
+						value={formData.email}
+					/>
+				</div>
+				<div>
+					<p>Number</p>
+					<input
+						type="number"
+						name="number"
+						required
+						placeholder="number "
+						style={{ backgroundColor: "#DFDFDF" }}
+						className="pl-4 h-10 w-full focus:outline-none"
+						onChange={handleChange}
+						value={formData.email}
+					/>
+				</div>
+				<div className="flex justify-center items-center">
+					{isLoading ? (
+						<div className="lds-dual-ring" />
+					) : (
+						<input
+							className={`flex justify-center items-center rounded p-1 px-3  cursor-pointer font-bold text-xl text-center`}
+							type="submit"
+							value="Create"
+							style={{ backgroundColor: "#0097D8" }}
+						/>
+					)}
+				</div>
+			</form>
+		</div>
 	)
 }
 

@@ -4,9 +4,10 @@ import React from "react"
 import { Link, useLocation } from "react-router-dom"
 import { navLinks } from "../utils/data"
 import { useStoreContext } from "../store"
+import { initialState } from "../utils/helpers.js/store.helper"
 
 const Nav = () => {
-	const { isLoggedIn } = useStoreContext()
+	const { isLoggedIn, setStore } = useStoreContext()
 	const { pathname } = useLocation()
 	return (
 		<nav
@@ -47,6 +48,18 @@ const Nav = () => {
 						))}
 					</div>
 				))}
+			{isLoggedIn && (
+				<div onClick={() => setStore(initialState)} className="cursor-pointer">
+					<p
+						className="text-sm font-bold"
+						style={{
+							color: "#FFF",
+						}}
+					>
+						logout
+					</p>
+				</div>
+			)}
 		</nav>
 	)
 }

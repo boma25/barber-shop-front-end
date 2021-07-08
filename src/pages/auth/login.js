@@ -15,9 +15,11 @@ const Login = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [redirect, setRedirect] = useState(false)
 	const [to, setTo] = useState(store?.order ? "/book" : "/services")
+
 	const handleChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
+
 	const handleLogin = async (e) => {
 		setIsLoading(true)
 		e.preventDefault()

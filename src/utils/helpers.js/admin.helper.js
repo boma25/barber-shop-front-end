@@ -8,9 +8,9 @@ const createBarber = async ({ date, number }) => {
 	try {
 		response = await AdminApi.createBarber({ date, number })
 		toast.success(response.data)
-		return response.data
+		return response
 	} catch (error) {
-		response = error.response.data.message
+		response = error?.response?.data?.message || "network error"
 		return toast.error(response)
 	}
 }
@@ -22,7 +22,7 @@ const updateBarber = async ({ id, number }) => {
 		toast.success(response.data)
 		return response.status
 	} catch (error) {
-		response = error.response.data.message
+		response = error?.response?.data?.message || "network error"
 		return toast.error(response)
 	}
 }
@@ -33,7 +33,7 @@ const getAllBarbers = async () => {
 		response = await AdminApi.getAllBarbers()
 		return response
 	} catch (error) {
-		response = error.response.data.message
+		response = error?.response?.data?.message || "network error"
 		toast.error(response)
 		return response
 	}
@@ -44,7 +44,7 @@ const getAllBooks = async () => {
 		response = await AdminApi.getAllBooks()
 		return response
 	} catch (error) {
-		response = error.response.data.message
+		response = error?.response?.data?.message || "network error"
 		toast.error(response)
 		return response
 	}
