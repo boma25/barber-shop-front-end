@@ -17,49 +17,54 @@ const Nav = () => {
 			<Link to="/">
 				<p className="text-white text-xl font-bold">Barbershop</p>
 			</Link>
-			{!pathname.includes("/admin") &&
-				(isLoggedIn ? (
-					<Link to="/services">
+			<div className="flex space-x-4 items-center">
+				{!pathname.includes("/admin") &&
+					(isLoggedIn ? (
+						<Link to="/services">
+							<p
+								className="text-sm font-bold"
+								style={{
+									color:
+										pathname === "/services" || pathname === "/book"
+											? "#FFF"
+											: "black",
+								}}
+							>
+								Book
+							</p>
+						</Link>
+					) : (
+						<div className="flex">
+							{navLinks.map((value, index) => (
+								<Link key={index} to={value.route} className="mr-4">
+									<p
+										className="text-sm font-bold"
+										style={{
+											color: value.route === pathname ? "#FFF" : "black",
+										}}
+									>
+										{value.name}
+									</p>
+								</Link>
+							))}
+						</div>
+					))}
+				{isLoggedIn && (
+					<div
+						onClick={() => setStore(initialState)}
+						className="cursor-pointer"
+					>
 						<p
 							className="text-sm font-bold"
 							style={{
-								color:
-									pathname === "/services" || pathname === "/book"
-										? "#FFF"
-										: "black",
+								color: "#FFF",
 							}}
 						>
-							Book
+							logout
 						</p>
-					</Link>
-				) : (
-					<div className="flex">
-						{navLinks.map((value, index) => (
-							<Link key={index} to={value.route} className="mr-4">
-								<p
-									className="text-sm font-bold"
-									style={{
-										color: value.route === pathname ? "#FFF" : "black",
-									}}
-								>
-									{value.name}
-								</p>
-							</Link>
-						))}
 					</div>
-				))}
-			{isLoggedIn && (
-				<div onClick={() => setStore(initialState)} className="cursor-pointer">
-					<p
-						className="text-sm font-bold"
-						style={{
-							color: "#FFF",
-						}}
-					>
-						logout
-					</p>
-				</div>
-			)}
+				)}
+			</div>
 		</nav>
 	)
 }
