@@ -61,6 +61,7 @@ const Order = () => {
 				setTo("/")
 				const { order, ...rest } = store
 				setStore(rest)
+				setIsLoading(false)
 			}
 			if (!response) {
 				setStore({ ...rest, isLoggedIn: false, accessToken: "" })
@@ -71,7 +72,6 @@ const Order = () => {
 		}
 		setStore({ ...rest, isLoggedIn: false, accessToken: "" })
 		setRedirect(true)
-		setIsLoading(false)
 	}
 
 	return redirect ? (

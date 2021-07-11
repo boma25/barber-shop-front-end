@@ -32,7 +32,7 @@ const Admin = () => {
 			const barbers = await getAllBarbers()
 			if (books.status === 200 || barbers.status === 200) {
 				setBooks(books.data.sort((a, b) => new Date(a.date) - new Date(b.date)))
-				setBarbers(
+				return setBarbers(
 					barbers.data.sort((a, b) => new Date(a.date) - new Date(b.date))
 				)
 			}
