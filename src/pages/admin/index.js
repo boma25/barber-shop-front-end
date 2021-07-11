@@ -30,10 +30,23 @@ const Admin = () => {
 		async function getData() {
 			const books = await getAllBooks()
 			const barbers = await getAllBarbers()
+			console.log(books.data)
 			if (books.status === 200 || barbers.status === 200) {
-				setBooks(books.data.sort((a, b) => new Date(a.date) - new Date(b.date)))
+				setBooks(
+					books.data.filter((value) => {
+						let test = `${moment
+							.duration(moment(value.date).diff(moment()))
+							.days()}`
+						return test[0] !== "-"
+					})
+				)
 				return setBarbers(
-					barbers.data.sort((a, b) => new Date(a.date) - new Date(b.date))
+					barbers.data.filter((value) => {
+						let test = `${moment
+							.duration(moment(value.date).diff(moment()))
+							.days()}`
+						return test[0] !== "-"
+					})
 				)
 			}
 			if (books === "Unauthorized") {
@@ -90,7 +103,6 @@ const Admin = () => {
 					</div>
 					<div className="overflow-auto h-5/6">
 						{barbers
-							?.filter((value) => new Date(value.date) >= new Date())
 							?.sort((a, b) => new Date(a.date) - new Date(b.date))
 							?.map((value, index) => (
 								<div
@@ -141,7 +153,7 @@ const Admin = () => {
 					<p className="text-xl font-bold mb-4">Booked</p>
 					<div className="overflow-auto h-5/6">
 						{books
-							?.filter((value) => new Date(value.date) >= new Date())
+							?.sort((a, b) => new Date(a.date) - new Date(b.date))
 							?.map((value, index) => (
 								<div
 									key={index}

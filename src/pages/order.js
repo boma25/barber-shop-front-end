@@ -12,6 +12,7 @@ import calenderImg from "../assets/calender.png"
 import clockImg from "../assets/clock.png"
 import { book } from "../utils/helpers.js/book.helper"
 import { Redirect } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const Order = () => {
 	const { store, setStore, activeService, isLoggedIn } = useStoreContext()
@@ -52,6 +53,12 @@ const Order = () => {
 	}
 
 	const handleOrder = async () => {
+		const test = `${moment
+			.duration(moment(formData.date).diff(moment()))
+			.days()}`
+		if (test[0] === "-") {
+			return toast.error("cant book a past date")
+		}
 		setIsLoading(true)
 		setStore({ ...store, order: formData })
 		const { order, ...rest } = store
@@ -59,19 +66,13 @@ const Order = () => {
 			const response = await book(formData)
 			if (response.status === 201) {
 				setTo("/")
-				const { order, ...rest } = store
 				setStore(rest)
-				setIsLoading(false)
-			}
-			if (!response) {
-				setStore({ ...rest, isLoggedIn: false, accessToken: "" })
 				return setRedirect(true)
-			} else {
-				return
 			}
+		} else {
+			setRedirect(true)
 		}
-		setStore({ ...rest, isLoggedIn: false, accessToken: "" })
-		setRedirect(true)
+		setIsLoading(false)
 	}
 
 	return redirect ? (
