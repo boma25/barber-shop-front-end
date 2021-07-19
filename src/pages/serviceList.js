@@ -18,8 +18,8 @@ const ServiceList = () => {
 	}
 
 	return (
-		<Layout>
-			<p className="ld:ml-32 md:ml-4 ml-2 mb-10 text-sm font-semibold ">
+		<Layout showBg>
+			<p className="lg:ml-32 md:ml-4 ml-2 mb-10 text-white text-sm font-bold ">
 				please select a service
 			</p>
 			<div className="lg:px-32 md:px-4 px-2">
@@ -33,16 +33,10 @@ const ServiceList = () => {
 						to="/book"
 					>
 						<div
-							style={{ backgroundColor: value.color }}
-							className="flex justify-center items-center h-20 w-1/4"
-						>
-							<p className="text-white text-xl font-bold text-center">
-								{value.time}
-							</p>
-						</div>
-						<div
-							style={{ backgroundColor: hover === index ? "#D6D4D4" : "#fff" }}
-							className="flex pl-10 items-center h-20 w-3/4"
+							style={{
+								backgroundColor: hover === index ? value.color : "#fff",
+							}}
+							className="flex pl-10 items-center h-20 w-full"
 						>
 							<p className="md:text-3xl text-2xl font-bold text-center">
 								{value.service}
