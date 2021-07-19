@@ -19,12 +19,12 @@ export const serviceList = [
 	},
 	{
 		service: "Get a shave",
-		time: "30 minutes",
+		time: "1 hour",
 		color: "#E1A407",
 	},
 	{
 		service: "Get a line up",
-		time: "30 minutes",
+		time: "1 hour",
 		color: "#787885",
 	},
 	{
